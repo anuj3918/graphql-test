@@ -14,7 +14,7 @@ const mDb = require("../../database/mdb")
 const ContestType = require("./contest")
 
 module.exports = new GraphQLObjectType({
-    name: "MeType",
+    name: "UserType",
 
     fields: {
         id: { type: GraphQLID},
@@ -31,8 +31,8 @@ module.exports = new GraphQLObjectType({
         contests: {
             type: new GraphQLList(ContestType),
             description: 'Contests created by this user',
-            resolve: (obj, args, { pgPool }) =>{
-                return pgDb(pgPool).getContests(obj)
+            resolve: (obj, args, { loaders }) =>{
+                return loaders.contestsForUserIds.load(obj.id)
             }
         },
         contestsCount: {

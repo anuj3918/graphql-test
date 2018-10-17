@@ -18,8 +18,8 @@ const RootQueryType = new GraphQLObjectType({
                 args: {
                     key: { type: new GraphQLNonNull(GraphQLString) }
                 },
-                resolve: (obj, args, { pgPool }) => {
-                    return pgDb(pgPool).getUserByApiKey(args.key);
+                resolve: (obj, args, { loaders }) => {
+                    return loaders.usersByApiKeys.load(args.key);
                 }
             }
         }

@@ -27,8 +27,8 @@ module.exports = new GraphQLObjectType({
             },
             names: {
                 type: new GraphQLList(NameType),
-                resolve: (obj, args, { pgPool }) => {
-                    return pgDb(pgPool).getNames(obj)
+                resolve: (obj, args, { loaders }) => {
+                    return loaders.namesByContestIds.load(obj.id)
                 }
             }
         }
