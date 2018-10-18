@@ -53,6 +53,19 @@ module.exports = (pgPool) => {
 			`, [slug(title), title, description, apiKey]).then(result=>{
 				return humps.camelizeKeys(result.rows)[0];
 			});
+		},
+		getActivityByUserIds(userIds) {
+			return pgPool.query(`
+				select created_at, created_by, '' as title, label, 'name' as activity_type  
+				from names n 
+				where n.created_by = ANY($1)
+				union
+				select created_at, created_by, title, '' as label, 'contest' as activity_type
+				from contests c 
+				where c.created_by = ANY($1)
+			`, [userIds]).then(result => {
+				return orderedFor(result.rows, userIds, 'createdBy', false);
+			});
 		}
 	};
 };
