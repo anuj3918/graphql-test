@@ -1,4 +1,5 @@
-const { orderedFor } = require('../lib/util');
+const { orderedFor, slug } = require('../lib/util');
+const humps = require('humps');
 
 module.exports = (pgPool) => {
 	return {
@@ -40,6 +41,17 @@ module.exports = (pgPool) => {
             where id = ANY($1)
             `, [nameIds]).then(result=>{
 				return orderedFor(result.rows, nameIds, 'id', true);
+			});
+		},
+		addNewContest({ title, description, apiKey }) {
+			return pgPool.query(`
+			insert into contests(code, title, description, created_by)
+			values($1, $2, $3, 
+				(select id from users where api_key = $4)
+			)
+			returning *
+			`, [slug(title), title, description, apiKey]).then(result=>{
+				return humps.camelizeKeys(result.rows)[0];
 			});
 		}
 	};

@@ -1,0 +1,43 @@
+{
+  user1: user(key: "4242") {
+    id
+    email
+    fullName
+    contestsCount
+    namesCount
+    votesCount
+    contests {
+      title
+      names {
+        label
+        createdBy {
+          fullName
+        }
+        totalVotes {
+          up
+          down
+        }
+      }
+    }
+  },
+  user2: user(key: "0000") {
+    id
+    email
+    fullName
+    contestsCount
+    namesCount
+    votesCount
+    contests {
+      title
+      names {
+        label
+        createdBy {
+          fullName
+        }
+        totalVotes {
+          up
+        }
+      }
+    }
+  }
+}
