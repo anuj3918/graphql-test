@@ -33,6 +33,14 @@ module.exports = (pgPool) => {
             `, [contestIds]).then(result=>{
 				return orderedFor(result.rows, contestIds, 'contestId', false);
 			});
+		},
+		getTotalVotesByNames(nameIds) {
+			return pgPool.query(`
+            select id, up, down from total_votes_by_name
+            where id = ANY($1)
+            `, [nameIds]).then(result=>{
+				return orderedFor(result.rows, nameIds, 'id', true);
+			});
 		}
 	};
 };

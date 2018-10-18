@@ -10,6 +10,8 @@ module.exports = new GraphQLObjectType({
 
 	fields: () => {
 		const UserType = require('./user');
+		const TotalVotesType = require('./total-votes');
+
 		return {
 			id: { type: new GraphQLNonNull(GraphQLID) },
 			label: { type: new GraphQLNonNull(GraphQLString) },
@@ -19,6 +21,12 @@ module.exports = new GraphQLObjectType({
 				type: UserType,
 				resolve: (obj, args, { loaders }) => {
 					return loaders.usersByIds.load(obj.createdBy);
+				}
+			},
+			totalVotes: {
+				type: TotalVotesType,
+				resolve: (obj, args, { loaders }) => {
+					return loaders.totalVotesByNames.load(obj.id);
 				}
 			}
 		};
